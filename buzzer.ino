@@ -552,10 +552,6 @@ void BuzzerSetup() {
 }
 
 void BuzzerControlLoop() {
-  Serial.print("playing song with index: ");
-  Serial.print(songIndex);
-  Serial.print("\n");
-  
   int tempo = songs[songIndex].tempo;
   int wholenote = (60000 * 4) / tempo;
   int* melody = songs[songIndex].melody;
@@ -563,7 +559,6 @@ void BuzzerControlLoop() {
   int notes = melodySize / sizeof(melody[0]) / 2;
 
   if (buzzerPosition == notes * 2) {
-    Serial.print("song done\n");
     // song is done
     songIndex = random(sizeof(songs)/sizeof(songs[0]));
 
@@ -571,7 +566,6 @@ void BuzzerControlLoop() {
   }
   else {
     if (!isPlayingNote) {
-      Serial.print("starting note\n");
       // calculates the duration of each note
       int divider = melody[buzzerPosition + 1];
       if (divider > 0) {
@@ -588,7 +582,6 @@ void BuzzerControlLoop() {
       isPlayingNote = true;
     }
     if (isPlayingNote && buzzerChrono.hasPassed(noteDuration)) {
-      Serial.print("finishing note\n");
       buzzerChrono.restart();
       isPlayingNote = false;
       noTone(buzzer);
